@@ -113,10 +113,9 @@ def editOrCreateSleep(request,sleep = None,success=False):
             if "error" in request.GET:
                 if request.GET["error"] == "partial":
                     context["partialError"] = True
-                    try:
-                        p = request.user.partialsleep
+                    p = request.user.partialsleep_set.first()
+                    if p is not None:
                         initial.update({"timezone": p.timezone, "start_time": p.start_local_time().strftime(fmt)})
-                    except PartialSleep.DoesNotExist: pass
             form = SleepForm(request.user, fmt, initial=initial)
     if request.method == 'POST':
         if form.is_valid():
