@@ -142,7 +142,7 @@ class SleepManager(models.Manager):
         return packed
 
 class PartialSleep(models.Model):
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User)
     start_time = models.DateTimeField()
     timezone = models.CharField(max_length=255, choices = TIMEZONES, default=settings.TIME_ZONE)
 
@@ -184,7 +184,7 @@ class PartialSleep(models.Model):
         """
         timezone = user.sleeperprofile.timezone
         pytztimezone = pytz.timezone(timezone)
-        p = user.partialsleep
+        p = user.partialsleep_set.first()
         start = p.start_time.astimezone(pytztimezone)
         end = now().astimezone(pytz.timezone(timezone)).replace(microsecond = 0)
         date = end.date()

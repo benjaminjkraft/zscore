@@ -545,12 +545,12 @@ def finishPartialSleep(request):
 
 @login_required
 def deletePartialSleep(request):
-    try:
-        p= request.user.partialsleep
+    p = request.user.partialsleep_set.first()
+    if p is not None:
         p.delete()
         if "next" in request.GET: return HttpResponseRedirect(request.GET["next"])
         return HttpResponseRedirect("/")
-    except PartialSleep.DoesNotExist:
+    else:
         return HttpResponseBadRequest('')
 
 @login_required

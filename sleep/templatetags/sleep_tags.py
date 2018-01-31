@@ -16,11 +16,8 @@ def displayAnnouncements():
 
 @register.inclusion_tag('inclusion/partial_sleep.html', takes_context=True)
 def displayPartialButton(context, user):
-    try:
-        p = user.partialsleep
-        context['has_partial'] = True
-    except PartialSleep.DoesNotExist:
-        context['has_partial'] = False
+    p = user.partialsleep_set.first()
+    context['has_partial'] = p is not None
     return context
 
 
@@ -32,10 +29,10 @@ def isAsleep(context, you, them):
     else:
         priv = p.getPermissions(you)
     if priv >= p.PRIVACY_MAX: #In case, for some goddamn reason, someone defines a privacy setting higher than PRIVACY_MAX
-        try:
-            partial = them.partialsleep
+        partial = them.partialsleep_set.first()
+        if partial is not None:
             newcontext =  {"asleep": "probably asleep"}
-        except PartialSleep.DoesNotExist:
+        else:
             if p.isLikelyAsleep(): newcontext = {"asleep": "likely asleep"}
             else: newcontext =  {"asleep": "probably awake"}
         newcontext["user"] = them
