@@ -254,7 +254,9 @@ function drawSleep(sleep)
     var $endtd = endblock['end'];
     if ($endtd == null) return false;
     // Fill them in with carryovers as needed
-    if (start.getDate() == end.getDate())
+    var endDate = end;
+    endDate.setMinutes(-1);
+    if (start.getDate() == endDate.getDate())
     {
 	// It's all one line -- render normally
 	drawSleepBox(sleep.pk, $starttd, $endtd);
@@ -280,7 +282,7 @@ function drawSleep(sleep)
 		if($endRowTd == null) return false;
 		drawSleepBox(sleep.pk, $starttd, $endRowTd, true, false);
 	    }
-	    else if (curDate.getDate() == end.getDate())
+	    else if (curDate.getDate() == endDate.getDate())
 	    {
 		var beginRowTime = new Date(end);
 		beginRowTime.setHours(0);
